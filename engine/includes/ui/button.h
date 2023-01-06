@@ -4,8 +4,8 @@
 typedef struct {
 	dynArray* buttons;
 } buttonWatchdogData;
-	
-buttonWatchdogData BWdata;
+
+extern buttonWatchdogData BWdata;
 
 typedef struct {
 	int_Texture* tx;
@@ -20,4 +20,3 @@ typedef struct {
 
 void buttonWatchdog(entity** this);
 void createButton(char* name, Rect buttonDim, buttonData* data);
-

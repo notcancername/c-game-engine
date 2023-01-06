@@ -1,6 +1,6 @@
 #pragma once
 #define INIT_MAIN_H
 
-int running;
+extern int running;
 
-float dt;
+extern float dt;

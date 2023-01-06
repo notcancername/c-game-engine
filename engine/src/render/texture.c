@@ -1,12 +1,16 @@
 #include "engine.h"
 
+int textureCount;
+const char** textureLocations;
+dictionary textures;
+
 /**
  * @brief      Prints the texture dictionary.
  */
 void printTextures() {
 	for (size_t i = 0; i < textures->key->arraySize; i++) {
 		printf("%ld: %s\n", i, *(char**)getElement(textures->key, i));
-	}	
+	}
 }
 
 /**
@@ -73,7 +77,7 @@ int loadTexture(const char *textureDir, const char* textureName) {
 		logtofile(error, ERR, "Texture");
 		return 1;
 	}
-	SDL_Surface* intTextureAtlas = SDL_CreateRGBSurface(0, textureAtlas->w + surface->w, surface->h > textureAtlas->h ? surface->h : textureAtlas->w, 
+	SDL_Surface* intTextureAtlas = SDL_CreateRGBSurface(0, textureAtlas->w + surface->w, surface->h > textureAtlas->h ? surface->h : textureAtlas->w,
 														32, rmask, gmask, bmask, amask);
 	SDL_BlitSurface(textureAtlas, NULL, intTextureAtlas, &(SDL_Rect){0, 0, textureAtlas->w, textureAtlas->h});
 	SDL_BlitSurface(surface, NULL, intTextureAtlas, &(SDL_Rect){textureAtlas->w, 0, surface->w, surface->h});
@@ -101,7 +105,7 @@ int loadTexture(const char *textureDir, const char* textureName) {
 	textureCount++;
 	return 0;
 
-}	
+}
 
 /**
  * @brief      Destroys all textures in the engine
@@ -152,7 +156,7 @@ int_Texture* getTexture(const char* key) {
 }
 
 int_Texture* colourTexture(RGBA colour) {
-	
+
 	Uint32 rmask, gmask, bmask, amask;
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
     	rmask = 0xff000000;
@@ -166,7 +170,7 @@ int_Texture* colourTexture(RGBA colour) {
     	amask = 0xff000000;
 	#endif
 
-    
+
     /*char testbuf[32];
 	strcpy(testbuf, "Colour: 0x");
 	sprintf((testbuf + 10), "%08x", colour.rgba);
@@ -183,7 +187,7 @@ int_Texture* colourTexture(RGBA colour) {
 		return NULL;
 	}
 	SDL_FillRect(surface, &(SDL_Rect){0,0,10,10}, (uint32_t)colour.rgba);
-	SDL_Surface* intTextureAtlas = SDL_CreateRGBSurface(0, textureAtlas->w + surface->w, surface->h > textureAtlas->h ? surface->h : textureAtlas->w, 
+	SDL_Surface* intTextureAtlas = SDL_CreateRGBSurface(0, textureAtlas->w + surface->w, surface->h > textureAtlas->h ? surface->h : textureAtlas->w,
 														32, rmask, gmask, bmask, amask);
 	SDL_BlitSurface(textureAtlas, NULL, intTextureAtlas, &(SDL_Rect){0, 0, textureAtlas->w, textureAtlas->h});
 	SDL_BlitSurface(surface, NULL, intTextureAtlas, &(SDL_Rect){textureAtlas->w, 0, surface->w, surface->h});
@@ -191,7 +195,7 @@ int_Texture* colourTexture(RGBA colour) {
 	int_Texture* intTx = malloc(sizeof(*intTx));
 	*intTx = (int_Texture){surface, textureCount, textureAtlas->w, 0};
 	//printf("w: %d, h: %d, id:%d\n", intTx->surface->w, intTx->surface->h, intTx->textureID);
-	
+
 	char buf[32];
 	strcpy(buf, "Colour: 0x");
 	sprintf((buf + 10), "%08x", colour.rgba);

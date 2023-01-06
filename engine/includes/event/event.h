@@ -3,7 +3,7 @@
 
 void processEvents();
 
-int eventCount;
-SDL_Event events[256];
+extern int eventCount;
+extern SDL_Event events[256];
 
-const Uint8* keyPresses;
+extern const Uint8* keyPresses;

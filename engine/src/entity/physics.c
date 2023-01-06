@@ -1,5 +1,10 @@
 #include "engine.h"
 
+float physicsTime;
+universe physicsData;
+cpSpace* space;
+
+
 // positive y = up
 // positive x = right
 
@@ -28,7 +33,7 @@ void processPhysics() {
 
 		(*intEntity)->object->rect.x = pos.x;
 		(*intEntity)->object->rect.y = pos.y;
-		
+
 		updateObject((*intEntity)->object);
 	}
 }
@@ -52,7 +57,7 @@ float circleCircleCollision(entity** a, entity** intEntity) {
 	float radius1 = (entityRect.w+entityRect.h)/4;
 	vec circleCenter1 = VECCNT(entityRect.x+(entityRect.w/2), entityRect.y+(entityRect.h/2));
 
-	
+
 	float radius2 = (intRect.w+intRect.h)/4;
 	vec circleCenter2 = VECCNT(intRect.x+(intRect.w/2), intRect.y+(intRect.h/2));
 
@@ -102,6 +107,6 @@ float AABBCollision(entity** a, entity** intEntity) {
 			//collision!
 		return 1;
    	}
-		
+
 	return 0;
 }

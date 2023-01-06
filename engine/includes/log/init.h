@@ -1,6 +1,6 @@
 #pragma once
 #define LOG_INIT_H
 
-FILE *logptr;
+extern FILE *logptr;
 
 int initLog();

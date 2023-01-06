@@ -28,12 +28,12 @@ typedef struct entity_int {
 	body* body;
 } entity;
 
-int entityCount;
-int entityUID;
+extern int entityCount;
+extern int entityUID;
 
 
-dictionary entities;
-int deletedCount;
+extern dictionary entities;
+extern int deletedCount;
 
 void initEntities();
 void stub();

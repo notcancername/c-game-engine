@@ -8,11 +8,11 @@ typedef struct {
 	int y;
 } int_Texture;
 
-int textureCount;
+extern int textureCount;
 
-const char** textureLocations;
+extern const char** textureLocations;
 
-dictionary textures;
+extern dictionary textures;
 
 void printTextures();
 int loadTexture(const char *textureDir, const char* textureName);

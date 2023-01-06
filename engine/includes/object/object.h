@@ -8,7 +8,6 @@ void updateObject(object* intObject);
 object* getObject(const char* key);
 object* getObjectID(int ID);
 
-int objectUID;
-int renderObjectSize[MAX_RENDER_LAYERS];
-int objectCount;
-
+extern int objectUID;
+extern int renderObjectSize[MAX_RENDER_LAYERS];
+extern int objectCount;

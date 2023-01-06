@@ -6,8 +6,9 @@ typedef struct {
 	float maxAcceleration;
 	float maxForce;
 } universe;
-float physicsTime;
-universe physicsData;
+
+extern float physicsTime;
+extern universe physicsData;
 
 void initPhysics();
 void processPhysics();
@@ -20,4 +21,4 @@ float AABBCollision(entity** a, entity** intEntity);
 float circleCircleCollision(entity** a, entity** intEntity);
 float circleBoxCollision(entity** a, entity** intEntity);
 
-cpSpace* space;
+extern cpSpace* space;

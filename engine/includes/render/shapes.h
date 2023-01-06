@@ -15,10 +15,10 @@ typedef struct {
 	RGBA colour;
 } shape;
 
-stack* shapeStack;
+extern stack* shapeStack;
 
-program circleShader;
-program lineShader;
+extern program circleShader;
+extern program lineShader;
 
 
 void initShapes();

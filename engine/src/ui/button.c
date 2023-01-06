@@ -1,5 +1,7 @@
 #include "engine.h"
 
+buttonWatchdogData BWdata;
+
 void buttonWatchdog(entity** this) {
 	UNUSED(this);
 	int x = 0;
@@ -17,7 +19,7 @@ void buttonWatchdog(entity** this) {
 			//AABB collision test
 			if (buttonRect.x <= x && x <= buttonRect.x + buttonRect.w &&
 				buttonRect.y <= y && y <= buttonRect.y + buttonRect.h) {
-				
+
 				buttonData* data = (buttonData*)(*intEntity)->data;
 				if ((*intEntity)->object->id != activeButton) {
 					//printf("entity: %d\n", (*intEntity)->object->id);
@@ -41,7 +43,7 @@ void createButton(char* name, Rect buttonDim, buttonData* data) {
 	//text handling for names
 	char* buffer = gmalloc(strlen(name) + strlen("Button_") + 12 + 1 + 1); //extra space for a number, the seperator and the null term
 	sprintf(buffer, "Button_%d_%s", entityUID + 1, name);
-	
+
 	if (data->trigger_func == NULL) {
 		data->trigger_func = stub;
 	}
@@ -52,7 +54,7 @@ void createButton(char* name, Rect buttonDim, buttonData* data) {
 	}
 
 	int id = createEntity((object){.name = (const char*)buffer,
-						  .rect = buttonDim, 
+						  .rect = buttonDim,
 						  .xOffset = 0,
 						  .yOffset = 0,
 						  .scale = 0.0,

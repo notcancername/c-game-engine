@@ -7,14 +7,14 @@ typedef struct {
 	float x,y,w,h;
 } Rect;
 
-SDL_Window *window;
+extern SDL_Window *window;
 //SDL_Renderer *renderer;
-SDL_GLContext* context;
+extern SDL_GLContext* context;
 
-SDL_Surface* textureAtlas;
-GLuint txAtlasID;
+extern SDL_Surface* textureAtlas;
+extern GLuint txAtlasID;
 
-dictionary shaders;
+extern dictionary shaders;
 
 typedef struct {
 	GLchar** code;
@@ -25,8 +25,8 @@ int destroyShaders();
 
 SDL_GLContext* initOpenGLRender();
 
-float** vertices;
-GLuint** elements;
+extern float** vertices;
+extern GLuint** elements;
 
 
 int initRender();

@@ -1,14 +1,14 @@
 #pragma once
 #define RENDER_RENDER_H
 
-int frameCount;
+extern int frameCount;
 
 int render();
 
-Rect viewport;
+extern Rect viewport;
 
-int renderedObjects;
+extern int renderedObjects;
 
-float* renderVertices[MAX_RENDER_LAYERS];
-int* renderElements[MAX_RENDER_LAYERS];
-int renderCounts[MAX_RENDER_LAYERS];
+extern float* renderVertices[MAX_RENDER_LAYERS];
+extern int* renderElements[MAX_RENDER_LAYERS];
+extern int renderCounts[MAX_RENDER_LAYERS];

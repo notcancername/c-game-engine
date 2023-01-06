@@ -2,7 +2,8 @@
 
 #define ENGINE_H
 
-char* error;
+/* `error' is taken by glibc */
+extern char* error_;
 
 #define NOVALUE 0xFFFFFFFF
 //CONFIG OPTIONS!!!
@@ -23,7 +24,7 @@ char* error;
 #include <string.h>
 #include <math.h>
 
-#ifndef __WIN32__ 
+#ifndef __WIN32__
 #include <execinfo.h>
 #include <signal.h>
 #include <errno.h>
@@ -38,9 +39,9 @@ char* error;
 #include <GL/gl.h>
 
 #include <ft2build.h>
-#include FT_FREETYPE_H 
+#include FT_FREETYPE_H
 
-#include "libs/chipmunk/chipmunk.h"
+#include <chipmunk/chipmunk.h>
 
 #ifdef __WIN32__
 typedef unsigned int uint;
@@ -65,4 +66,4 @@ typedef unsigned int uint;
 
 //notes:
 
-//dt is fractions of a second 
+//dt is fractions of a second

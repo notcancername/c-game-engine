@@ -1,5 +1,9 @@
 #include "engine.h"
 
+int objectUID;
+int renderObjectSize[MAX_RENDER_LAYERS];
+int objectCount;
+
 /**
  * @brief      Creates an object.
  *
@@ -24,7 +28,7 @@ object* createObject(const char* objName, Rect rect, int xOffset, int yOffset, f
 
 	vec objectVertexID = VECCNT(renderObjectSize[layer], layer);
 //object vertex IDs need to be 2d, not 1d
-	
+
 	if (layer >= MAX_RENDER_LAYERS) {
 		layer = MAX_RENDER_LAYERS - 1;
 	}
@@ -57,7 +61,7 @@ object* createObject(const char* objName, Rect rect, int xOffset, int yOffset, f
 			int storedID = intObject->vertexID;
 			intObject->vertexID = vertexPool[vertexPoolSize - 1 - i];
 			vertexPool[vertexPoolSize-1-i] = storedID;
-			dictionary intObjDict = findPrevKey(objects, intObjDict->key);			
+			dictionary intObjDict = findPrevKey(objects, intObjDict->key);
 		}
 	}*/
 
@@ -81,7 +85,7 @@ object* createObject(const char* objName, Rect rect, int xOffset, int yOffset, f
 	addToDictionary(objects, buffer, intObject);
 	objectCount++;
 	objectUID++;
-	
+
 	return intObject;
 }
 
@@ -130,7 +134,7 @@ void updateObject(object* intObject) {
 	float atlasH = textureAtlas->h;
 	float atlasW = textureAtlas->w;
 
-	
+
 	Rect intRect = intObject->rect;
 	intRect.x += intObject->xOffset;
 	intRect.y += intObject->yOffset;
@@ -152,7 +156,7 @@ void updateObject(object* intObject) {
 	vertices[layer][count * 16 + 7] = (textureY - 0.5 + textureH) / atlasH;
 
 	vertices[layer][count * 16 + 10] = (textureX - 0.5 + textureW) / atlasW; // bottom right texcoord
-	vertices[layer][count * 16 + 11] = (textureY + 0.5) / atlasH; 
+	vertices[layer][count * 16 + 11] = (textureY + 0.5) / atlasH;
 
 	vertices[layer][count * 16 + 14] = (textureX + 0.5) / atlasW; // bottom left texcoord
 	vertices[layer][count * 16 + 15] = (textureY + 0.5) / atlasH;
@@ -166,18 +170,18 @@ void updateObject(object* intObject) {
 		vec rotation3 = vecRotateAroundOrigin(VECCNT(intRect.x + intRect.w, intRect.y + intRect.h), rotationOrigin, angle);
 		vec rotation4 = vecRotateAroundOrigin(VECCNT(intRect.x, intRect.y + intRect.h), rotationOrigin, angle);
 
-		vertices[layer][count * 16 + 0] = rotation1.x * 2.0 / SCREEN_WIDTH - 1.0;	
+		vertices[layer][count * 16 + 0] = rotation1.x * 2.0 / SCREEN_WIDTH - 1.0;
 		vertices[layer][count * 16 + 1] = rotation1.y * 2.0 / SCREEN_HEIGHT - 1.0;
 
-		vertices[layer][count * 16 + 4] = rotation2.x * 2.0 / SCREEN_WIDTH - 1.0;	
+		vertices[layer][count * 16 + 4] = rotation2.x * 2.0 / SCREEN_WIDTH - 1.0;
 		vertices[layer][count * 16 + 5] = rotation2.y * 2.0 / SCREEN_HEIGHT - 1.0;
 
-		vertices[layer][count * 16 + 8] = rotation3.x * 2.0 / SCREEN_WIDTH - 1.0;	
+		vertices[layer][count * 16 + 8] = rotation3.x * 2.0 / SCREEN_WIDTH - 1.0;
 		vertices[layer][count * 16 + 9] = rotation3.y * 2.0 / SCREEN_HEIGHT - 1.0;
 
-		vertices[layer][count * 16 + 12] = rotation4.x * 2.0 / SCREEN_WIDTH - 1.0;	
+		vertices[layer][count * 16 + 12] = rotation4.x * 2.0 / SCREEN_WIDTH - 1.0;
 		vertices[layer][count * 16 + 13] = rotation4.y * 2.0 / SCREEN_HEIGHT - 1.0;
-	
+
 		//(object - object center) rotated by angle
 		//angle rotated + object center = rotation
 		return;
@@ -221,16 +225,16 @@ void removeObject(const char* key) {
 
 	}
 	for (int i = 0; i < 6; i++) {
-		elements[layer][(int)intObject->vertexID.x * 6 + i] = 0;	
+		elements[layer][(int)intObject->vertexID.x * 6 + i] = 0;
 	}
 
 	vertexPools[layer] = grealloc(vertexPools[layer], sizeof(**vertexPools) * (vertexPoolSize[layer] + 2));
 	vertexPools[layer][vertexPoolSize[layer]] = (int)intObject->vertexID.x;
 	vertexPoolSize[layer]++;
-	
+
 	gfree((char*)intObject->name);
 	gfree(*(object**)getElement(objects->value, objectDictIndex));
 	removeKey(objects, key);
-	
+
 	objectCount--;
 }

@@ -1,5 +1,8 @@
 #include "engine.h"
 
+dictionary sounds;
+int soundCount;
+
 void initAudio() {
 	if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG) == 0) {
 		char buffer[256];
@@ -12,4 +15,3 @@ void initAudio() {
 
 	Mix_OpenAudio(48000, AUDIO_F32SYS, 2, 2048);
 }
-

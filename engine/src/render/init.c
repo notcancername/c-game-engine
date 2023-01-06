@@ -1,5 +1,15 @@
 #include "../../includes/engine.h"
 
+SDL_Window *window;
+SDL_GLContext* context;
+SDL_Surface* textureAtlas;
+GLuint txAtlasID;
+dictionary shaders;
+float** vertices;
+GLuint** elements;
+
+char* error_;
+
 /**
  * @brief      Initializes the render.
  *
@@ -7,13 +17,13 @@
  */
 int initRender() {
 	char error[256];
-	
+
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	logtofile("Initialising window", INF, "Render"); 
+	logtofile("Initialising window", INF, "Render");
 	window = SDL_CreateWindow("Game Engine",
 							  SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 							  SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -24,7 +34,7 @@ int initRender() {
     	crash();
 	}
 
-	logtofile("Initialising renderer", INF, "Render"); 
+	logtofile("Initialising renderer", INF, "Render");
 	context = initOpenGLRender();
 	if (!context) {
     	sprintf(error, "Initialising renderer failure!: %s", SDL_GetError());
@@ -65,13 +75,13 @@ int initRender() {
  */
 SDL_GLContext* initOpenGLRender() {
 	SDL_GLContext* intContext = SDL_GL_CreateContext(window);
-	
+
 	logtofile("Initialising GLEW", INF, "Render");
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
 	if (err != GLEW_OK) {
-		sprintf(error, "GLEW initialisation failure, error: %s\n", glewGetErrorString(err));
-		logtofile(error, SVR, "Render");
+		sprintf(error_, "GLEW initialisation failure, error: %s\n", glewGetErrorString(err));
+		logtofile(error_, SVR, "Render");
 		crash();
 	}
 
@@ -85,14 +95,14 @@ SDL_GLContext* initOpenGLRender() {
   	  -0.5f, -0.5f, 0.0f,
   	   0.5f, -0.5f, 0.0f,
    	   0.0f,  0.5f, 0.0f
-	};  
+	};
 	glBindVertexArray(objectShader.VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glViewport(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glEnable(GL_TEXTURE_2D); //cap error here
-	glEnable(GL_BLEND);  
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glClearColor(1.f, 1.f, 1.f, 1.0f);
 	SDL_GL_SetSwapInterval(0);
 
@@ -107,7 +117,7 @@ void cleanRender() {
 	logtofile("Destroying textures and dict.", INF, "Render");
 	cleanTexture();
 
-	logtofile("Destroying renderer", INF, "Render"); 
+	logtofile("Destroying renderer", INF, "Render");
 	SDL_GL_DeleteContext(context);
 	//destroyShaders();
 	//freeDictionary(shaders);
@@ -115,7 +125,7 @@ void cleanRender() {
 	gfree(elements);
 
 
-	logtofile("Destroying window", INF, "Render"); 
+	logtofile("Destroying window", INF, "Render");
 	SDL_DestroyWindow(window);
 }
 
@@ -208,7 +218,7 @@ MessageCallback( GLenum source,
 {
 	UNUSED(source);
 	UNUSED(	id);
-	UNUSED(	length); 
+	UNUSED(	length);
 	UNUSED(	userParam);
   fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
            ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
@@ -229,26 +239,26 @@ int loadShaders() {
 	objectShader = (program){.vertexPath = "engine/data/shaders/shader.vs", .fragmentPath = "engine/data/shaders/shader.fs"};
 	loadShader(&objectShader);
 	//printf("%d", objectShader->shaderProgram);
-	
+
 	glUseProgram(objectShader.shaderProgram);
 
-	glGenVertexArrays(1, &objectShader.VAO); 
+	glGenVertexArrays(1, &objectShader.VAO);
 	glBindVertexArray(objectShader.VAO);
 
-	glGenBuffers(1, &objectShader.VBO); 
-	glBindBuffer(GL_ARRAY_BUFFER, objectShader.VBO); 
-	
+	glGenBuffers(1, &objectShader.VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, objectShader.VBO);
+
 
 	glGenBuffers(1, &objectShader.EBO);
 
 	GLint posAttrib = glGetAttribLocation(objectShader.shaderProgram, "position");
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0); 
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
 	glEnableVertexAttribArray(posAttrib);
-	
+
 	GLint texAttrib = glGetAttribLocation(objectShader.shaderProgram, "texcoord");
 	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float))); //here
 	glEnableVertexAttribArray(texAttrib);
-	
+
 
 	//text shader
 
@@ -293,12 +303,12 @@ int destroyShaders() {
 		logtofile("Shaders already destroyed, returning!", WRN, "Render");
 		return 0;
 	}
-	
+
 	for (size_t i = 0; i < shaders->key->arraySize; i++) {
 		shader* intShader = *(shader**)getElement(shaders->value, i);
 		for (int i = 0; i < intShader->lineCount+1; i++) {
 			gfree(intShader->code[i]);
-		} 
+		}
 		gfree(intShader->code);
 		gfree(intShader);
 	}

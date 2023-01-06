@@ -3,9 +3,9 @@
 
 void initText();
 
-FT_Face abyssinica;
+extern FT_Face abyssinica;
 
-dynArray* font;
+extern dynArray* font;
 
 typedef struct {
 	uint txID;
@@ -14,9 +14,9 @@ typedef struct {
 	uint advance;
 } character;
 
-program textShader;
+extern program textShader;
 
-stack* textStack;
+extern stack* textStack;
 
 void renderText();
 void drawText(char* text, float x, float y, float scale, RGBA colour);

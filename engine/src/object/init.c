@@ -1,5 +1,10 @@
 #include "engine.h"
 
+dictionary objects;
+int* vertexPools[MAX_RENDER_LAYERS];
+int vertexPoolSize[MAX_RENDER_LAYERS];
+program objectShader;
+
 /**
  * @brief      Initializes the objects.
  */
@@ -26,11 +31,10 @@ void cleanObjects() {
 	//dictionary current = textures;
 
 	/*while (current->next != NULL) {
-		
+
 	}*/
 
 	//free(vertexPool);
 
 	freeDictionary(objects);
 }
-

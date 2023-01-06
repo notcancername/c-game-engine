@@ -7,9 +7,9 @@ void deleteEntity(entity** entity);
 void deleteEntities();
 void cleanEntities();
 
-object* AABBCollisionObj(entity** a);
-void testCollision();
-entity** getEntityByID(int ID);
+extern object* AABBCollisionObj(entity** a);
+extern void testCollision();
+extern entity** getEntityByID(int ID);
 
 #define ENTRECT(a) (*this)->object->rect.a
 
@@ -24,6 +24,6 @@ typedef struct {
 	entity* b;
 } collidePair;
 
-dynArray* collideArray;
+extern dynArray* collideArray;
 
 void collision_stub (entity**, entity**, float);

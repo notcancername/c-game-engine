@@ -1,15 +1,16 @@
 #include "engine.h"
 
+
 void initButtonWatchdog() {
 	createEntity((object){.name = "Button Watchdog",
-						  .rect = (Rect){0,0,0,0}, 
+						  .rect = (Rect){0,0,0,0},
 						  .xOffset = 0,
 						  .yOffset = 0,
 						  .scale = .0,
 						  .angle = 0,
 						  .texture = getTexture("DEFAULT"),
 						  .layer = 0}, 0
-						  ,buttonWatchdog, &BWdata, sizeof(BWdata), 
+						  ,buttonWatchdog, &BWdata, sizeof(BWdata),
 						  NULL, NULL);
 	BWdata.buttons = createDynArray(sizeof(int));
 }

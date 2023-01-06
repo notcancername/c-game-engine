@@ -17,11 +17,11 @@ typedef struct {
 	int layer;
 } object;
 
-dictionary objects;
-int* vertexPools[MAX_RENDER_LAYERS];
-int vertexPoolSize[MAX_RENDER_LAYERS];
+extern dictionary objects;
+extern int* vertexPools[MAX_RENDER_LAYERS];
+extern int vertexPoolSize[MAX_RENDER_LAYERS];
 
 
 void initObjects();
 void cleanObjects();
-program objectShader;
+extern program objectShader;

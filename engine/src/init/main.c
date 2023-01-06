@@ -1,5 +1,9 @@
 #include "engine.h"
 
+int running;
+float dt;
+
+
 /* TODO LIST
 
 memory leaks from entity** system and needing to impl entity cleanup functions
@@ -17,7 +21,7 @@ need to add non-fragmented monochromatic textures
 
 add typed vectors, because storing ints in a float format will lead to MANY issues
 
-vertex pool fragmentation? this probably doesnt need to be done yet, its not a huge priority 
+vertex pool fragmentation? this probably doesnt need to be done yet, its not a huge priority
 and things arent being created/destroyed often enough to warrant something like this
 
 implement a generic resource loading function set
@@ -27,7 +31,7 @@ multithread the entity handlers and the renderer (THIS WILL CAUSE ALL THE BUGS!!
 */
 
 /*notes
-	the mouse y coordinate needs to be fixed to the correct coordinate space by using SCREEN_HEIGHT - y, as shown in the button UI code 
+	the mouse y coordinate needs to be fixed to the correct coordinate space by using SCREEN_HEIGHT - y, as shown in the button UI code
 */
 
 /*
@@ -83,7 +87,7 @@ int engineStart() {
 		edges[1] = (GraphEdge){.vertexIDs = {i, i+16},
 					.weight = (float)rand() / (float)65535
 					};
-		
+
 		addVertex(graph, edges, 2);
 	}
 
@@ -108,19 +112,19 @@ int engineStart() {
 
  	logtofile("Initialising entities", INF, "Runtime");
  	initEntities();
-	
+
  	logtofile("Initialising UI", INF, "Runtime");
  	initUI();
 
  	/*logtofile("Initialising audio", INF, "Runtime");
  	initAudio();*/
-	
+
  	logtofile("Initialising Game", INF, "Runtime");
  	worldInit();
 
 
 	logtofile("Initialisation Complete!", INF, "Runtime");
-	
+
 	Uint64 intStartFrame, intEndFrame = 0;
 	Uint64 endFrame = 0;
 	float intDt;

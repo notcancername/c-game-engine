@@ -1,5 +1,11 @@
 #include "engine.h"
 
+dynArray* collideArray;
+
+object* AABBCollisionObj(entity** a);
+void testCollision();
+entity** getEntityByID(int ID);
+
 void stub(){}
 void collision_stub(entity** a, entity** b, float c){UNUSED(a);UNUSED(b);UNUSED(c);}
 void processDeletes();
@@ -24,11 +30,11 @@ void deleteEntityInt(entity** entity);
  */
 int createEntity(object obj, int collide, void (*entity_handler)(entity**), void* data, int dataSize, void (*collide_handler)(entity**, entity**, float), body* bodyData) {
 	object* intObject = createObject(obj.name, obj.rect, obj.xOffset, obj.yOffset, obj.scale, obj.angle, obj.texture, obj.layer);
-	
+
 	entity** intEntity;
 	intEntity = gmalloc(sizeof(entity*));
 	(*intEntity) = gmalloc(sizeof(entity));
-	
+
 	if (intObject == NULL) {
 		logtofile("Object creation error, entity creation cannot continue!", ERR, "Entity");
 		crash();
@@ -61,7 +67,7 @@ int createEntity(object obj, int collide, void (*entity_handler)(entity**), void
 		gfree((*intEntity)->data);
 		(*intEntity)->data = NULL;
 	}
-	
+
 	if (bodyData != NULL) {
 		if ((*intEntity)->body->collision_type == BODY_STATIC) {
 			(*intEntity)->body->body = cpSpaceAddBody(space, cpBodyNewKinematic());
@@ -89,7 +95,7 @@ int createEntity(object obj, int collide, void (*entity_handler)(entity**), void
 	itoa(entityUID, buffer);
 	addToDictionary(entities, buffer, intEntity);
 	entityCount++;
-	
+
 	return entityUID++;
 }
 
@@ -104,7 +110,7 @@ entity** getEntityByID(int ID) {
 	char buffer[18];
 	itoa(ID, buffer);
 	size_t entityValueIndex = findKey(entities, buffer);
-	return entityValueIndex == NOVALUE ? NULL : *(entity***)getElement(entities->value, entityValueIndex); 
+	return entityValueIndex == NOVALUE ? NULL : *(entity***)getElement(entities->value, entityValueIndex);
 }
 
 /**
@@ -166,7 +172,7 @@ void cleanEntities() {
 
 /**
  * @brief    Do not use this function! To be used internally by the entity system to delete entities
- * 
+ *
  */
 void deleteEntities() {
 	if (deletedCount == 0) {
@@ -180,7 +186,7 @@ void deleteEntities() {
 		    continue;
 		}
 		//
-		
+
 		entityCount--;
 
 		if (internalEntity->data != NULL) {
@@ -202,7 +208,7 @@ void deleteEntities() {
 	}
 
 	deletedCount = 0;
-}	
+}
 
 int entityQSort(const void* a, const void* b) {
 	entity** entityA = *((entity***)a);
@@ -259,7 +265,7 @@ void testCollision() {
 		if ((*entityB)->collide == COLLIDE_NONE) {
 			continue;
 		}
-		
+
 		//lets do s&p properly now
 		x:
 		for (size_t j = 0; j < activeIntervals->arraySize; j++) {
@@ -282,7 +288,7 @@ void testCollision() {
 				double b2 = (*entityA)->object->rect.x + (*entityA)->object->rect.w;
 				double a1 = (*entityB)->object->rect.x;
 				double a2 = (*entityB)->object->rect.x + (*entityB)->object->rect.w;
-				
+
 				//printf("%ld-%s: %f, %f\n %ld-%s: %f, %f\n\n", j, (*entityA)->object->name, a1, a2, i, (*entityB)->object->name, b1, b2);
 				//test interval
 				if ((a1 - b2) <= 0 && (b1 - a2) <= 0) {
@@ -324,6 +330,6 @@ object* AABBCollisionObj(entity** a) {
 			//collision!
 			return *(object**)getElement(objects->value, i);
    		}
-	}	
+	}
 	return NULL;
 }

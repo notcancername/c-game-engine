@@ -1,5 +1,12 @@
 #include "engine.h"
 
+int entityCount;
+int entityUID;
+
+
+dictionary entities;
+int deletedCount;
+
 /**
  * @brief      Initialises the entities
  */
